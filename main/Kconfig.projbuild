@@ -72,7 +72,9 @@ menu "Squeezelite-ESP32"
 			config TWATCH2020	
 				bool "T-WATCH2020 by LilyGo"				
 				select I2C_LOCKED		
-				select TARGET_LOCKED				
+				select TARGET_LOCKED	
+			config SQUEEZEAMPAGAIN	
+				bool "SqueezeAMPagain"			
 		endchoice	
 		config RELEASE_API
 			string "Software update URL"
@@ -91,6 +93,7 @@ menu "Squeezelite-ESP32"
 			default "SqueezeAMP" if SQUEEZEAMP
 			default "Squeezelite-TWATCH" if TWATCH2020
 			default "Muse" if MUSE
+			default "SqueezeAMPagain" if SQUEEZEAMPAGAIN
 			default "Squeezelite-ESP32"
 		config FW_PLATFORM_NAME
 			string
@@ -103,6 +106,7 @@ menu "Squeezelite-ESP32"
 		config DAC_CONFIG
 			string
 			default "model=TAS57xx,bck=33,ws=25,do=32,sda=27,scl=26,mute=14:0" if SQUEEZEAMP
+			default "model=TAS57xx,bck=33,ws=25,do=32,sda=21,scl=22,mute=14:0" if SQUEEZEAMPAGAIN
 			default "model=I2S,bck=26,ws=25,do=33,i2c=53,sda=21,scl=22" if TWATCH2020
 			default "model=I2S,bck=5,ws=25,do=26,di=35,i2c=16,sda=18,scl=23,mck" if MUSE
 			default ""
@@ -158,6 +162,7 @@ menu "Squeezelite-ESP32"
 		config SPKFAULT_GPIO
 			int
 			default 2 if SQUEEZEAMP
+			default 36 if SQUEEZEAMPAGAIN
 			default -1			
 		config BAT_CHANNEL
 			int 
