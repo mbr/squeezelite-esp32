@@ -1059,7 +1059,6 @@ $(document).ready(function () {
     $('#rTable tr').not('[class*="_hide"]').show()
 
   });
-  setTimeout(refreshAP, 1500);
   /* add validation for cmd_opt_c, which accepts a comma separated list. 
     getting known codecs from validOptions.codecs array
     use bootstrap classes to highlight the error with an overlay message */

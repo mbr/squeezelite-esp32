@@ -248,7 +248,7 @@ module.exports = (env, options) => (
             let buildRootPath = path.join(process.cwd(),'..','..','..');
             let wifiManagerPath=glob.sync(path.join(buildRootPath,'components/**/wifi-manager*'))[0];
             let buildCRootPath=glob.sync(buildRootPath)[0];
-            fs.appendFileSync('./dist/index.html.gz', 
+            fs.writeFileSync('./dist/index.html.gz',
               zlib.gzipSync(fs.readFileSync('./dist/index.html'), 
               {
                 chunckSize: 65536,
