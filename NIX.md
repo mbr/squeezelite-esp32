@@ -25,6 +25,15 @@ Changing gitlinks requires updating the corresponding submodule pins in
 to another upstream version; ESP-IDF stores at most 31 characters. Nix's fixed
 `SOURCE_DATE_EPOCH` makes build timestamps independent of wall-clock time.
 
+# Spotify credentials
+
+This upstream version requires a Spotify application client ID and secret for
+Spotify Connect. The checked-in `components/spotify/client_info.h` contains
+placeholders; the default build therefore does not provide working Spotify
+application credentials. Boot and network smoke tests do not test Spotify.
+Provisioning those credentials is a separate step. Do not commit secrets:
+embedding them in a Nix build also exposes them in its store and firmware output.
+
 # Validation and comparison
 
 The build validates the image checksum, SHA-256, ESP32 target, project/version,
@@ -57,6 +66,20 @@ allocated ELF section's contents, address, size and flags. It ignores only the
 application descriptor's date/time and ELF-digest fields, not code or board
 settings. `--rebuild` independently rebuilds the Nix derivation and checks its
 outputs against the previous realization.
+
+# Validation record
+
+Validated on Linux with Alex's `4eed7acd` baseline and upstream release
+`I2S-4MFlash.16.1737.master-v4.3` (`f8a2904b`) plus his board patch.
+Both versions passed container/native section comparisons and independent
+`nix build --rebuild` checks. Three application-only OTAs passed boot, Wi-Fi,
+and web-interface smoke tests: container baseline, native baseline, and native
+`1737`. Existing settings survived; `1737` added an empty `volume_rotary` setting.
+Audio and long-term reliability were not tested.
+
+The validated native `1737` image is 2,652,880 bytes, with SHA-256
+`177d76c8f66d0092167f56b04bf81b228b558f12fefa862cd9c21d4655578851`.
+The native baseline is preserved on `baseline-nix-validated`.
 
 # OTA and recovery
 

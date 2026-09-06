@@ -146,7 +146,7 @@
       tools = [ toolchain pythonEnv cmake pkgs.ninja pkgs.git pkgs.protobuf pkgs.pkg-config ];
       firmware = pkgs.stdenvNoCC.mkDerivation {
         pname = "squeezeampagain-firmware";
-        version = "4eed7acd-baseline";
+        version = "1737";
         src = lib.cleanSourceWith {
           src = self;
           filter = path: type:
@@ -163,7 +163,7 @@
         IDF_PATH = idf;
         IDF_CCACHE_ENABLE = "0";
         IDF_COMPONENT_MANAGER = "0";
-        PROJECT_VER = "I2S-4MFlash.16.4eed7acd.base";
+        PROJECT_VER = "I2S-4MFlash.16.1737.nix";
         dontUseCmakeConfigure = true;
         dontUseNinjaBuild = true;
         dontUseNinjaInstall = true;
@@ -188,7 +188,7 @@
           printf '\nCONFIG_SQUEEZEAMPAGAIN=y\nCONFIG_SPKFAULT_GPIO=36\n' >> sdkconfig
           cmake -S . -B build -G Ninja -DPYTHON=${pythonEnv}/bin/python \
             -DPYTHON_DEPS_CHECKED=1 -DIDF_TARGET=esp32 -DCCACHE_ENABLE=0 \
-            -DDEPTH=16 -DBUILD_NUMBER=baseline-16
+            -DDEPTH=16 -DBUILD_NUMBER=1737-16
           runHook postConfigure
         '';
         buildPhase = ''
