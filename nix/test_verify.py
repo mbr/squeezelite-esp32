@@ -33,7 +33,11 @@ class ImageValidation(unittest.TestCase):
                         verify(target, version)
             binary.write_bytes(original)
             config = target / "sdkconfig"
-            config.write_text(config.read_text().replace("CONFIG_SPKFAULT_GPIO=36", "CONFIG_SPKFAULT_GPIO=-1"))
+            config.write_text(
+                config.read_text().replace(
+                    "CONFIG_SPKFAULT_GPIO=36", "CONFIG_SPKFAULT_GPIO=-1"
+                )
+            )
             with self.assertRaises(ValueError):
                 verify(target, version)
 

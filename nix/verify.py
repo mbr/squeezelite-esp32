@@ -46,7 +46,8 @@ def verify(directory, version):
     table.verify()
     layout = [(p.name, p.type, p.subtype, p.offset, p.size) for p in table]
     require(
-        layout == [
+        layout
+        == [
             ("nvs", 1, 2, 0x9000, 0x4000),
             ("otadata", 1, 0, 0xD000, 0x2000),
             ("phy_init", 1, 1, 0xF000, 0x1000),
@@ -65,8 +66,12 @@ def verify(directory, version):
     require(image.checksum == image.calculate_checksum(), "Invalid image checksum")
     require(image.append_digest, "Image lacks SHA-256 validation")
     require(image.stored_digest == image.calc_digest, "Invalid image SHA-256")
-    require(struct.unpack_from("<I", data, 32)[0] == 0xABCD5432, "Missing app descriptor")
-    require(data[48:80].split(b"\0")[0].decode() == version, "Unexpected firmware version")
+    require(
+        struct.unpack_from("<I", data, 32)[0] == 0xABCD5432, "Missing app descriptor"
+    )
+    require(
+        data[48:80].split(b"\0")[0].decode() == version, "Unexpected firmware version"
+    )
     require(data[80:112].split(b"\0")[0] == b"SqueezeAMPagain", "Unexpected board name")
     return {
         "version": version,

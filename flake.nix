@@ -44,8 +44,20 @@
         };
       };
       pythonEnv = python.withPackages (p: with p; [
-        setuptools click pyserial future cryptography pyparsing pyelftools
-        kconfiglib reedsolo bitstring ecdsa construct pyyaml protobuf
+        setuptools
+        click
+        pyserial
+        future
+        cryptography
+        pyparsing
+        pyelftools
+        kconfiglib
+        reedsolo
+        bitstring
+        ecdsa
+        construct
+        pyyaml
+        protobuf
       ]);
       toolchain = pkgs.stdenv.mkDerivation {
         pname = "xtensa-esp32-elf";
@@ -139,7 +151,12 @@
           src = self;
           filter = path: type:
             lib.cleanSourceFilter path type && !(builtins.elem (baseNameOf path) [
-              "flake.nix" "flake.lock" "nix" "NIX.md" "check.sh" "format.sh"
+              "flake.nix"
+              "flake.lock"
+              "nix"
+              "NIX.md"
+              "check.sh"
+              "format.sh"
             ]);
         };
         nativeBuildInputs = tools;
@@ -156,11 +173,13 @@
           python ${./nix}/verify.py $out "$PROJECT_VER" > $out/manifest.json
           python ${./nix}/test_verify.py $out "$PROJECT_VER"
         '';
-        postUnpack = lib.concatMapStringsSep "\n" (sub: ''
-          mkdir -p "$sourceRoot/${sub.path}"
-          cp -a ${sub.src}/. "$sourceRoot/${sub.path}/"
-          chmod -R u+w "$sourceRoot/${sub.path}"
-        '') submodules;
+        postUnpack = lib.concatMapStringsSep "\n"
+          (sub: ''
+            mkdir -p "$sourceRoot/${sub.path}"
+            cp -a ${sub.src}/. "$sourceRoot/${sub.path}/"
+            chmod -R u+w "$sourceRoot/${sub.path}"
+          '')
+          submodules;
         configurePhase = ''
           runHook preConfigure
           export HOME=$TMPDIR
@@ -190,7 +209,8 @@
           runHook postInstall
         '';
       };
-    in {
+    in
+    {
       packages.${system} = { default = firmware; inherit firmware toolchain idf; };
       checks.${system}.firmware = firmware;
       formatter.${system} = pkgs.nixpkgs-fmt;

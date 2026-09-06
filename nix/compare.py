@@ -12,13 +12,23 @@ def compare(left, right, version):
     """Require identical configuration, layout, and allocated ELF sections."""
     reports = [verify(directory, version) for directory in (left, right)]
     for name in ("sdkconfig", "partition-table.bin"):
-        require((left / name).read_bytes() == (right / name).read_bytes(), f"Different {name}")
-    with (left / "squeezelite.elf").open("rb") as a, (right / "squeezelite.elf").open("rb") as b:
+        require(
+            (left / name).read_bytes() == (right / name).read_bytes(),
+            f"Different {name}",
+        )
+    with (left / "squeezelite.elf").open("rb") as a, (right / "squeezelite.elf").open(
+        "rb"
+    ) as b:
         a, b = ELFFile(a), ELFFile(b)
         require(a["e_machine"] == b["e_machine"], "Different architecture")
         require(a["e_entry"] == b["e_entry"], "Different entry point")
-        sections = [{s.name: s for s in elf.iter_sections() if s["sh_flags"] & 2} for elf in (a, b)]
-        require(sections[0].keys() == sections[1].keys(), "Different allocated sections")
+        sections = [
+            {s.name: s for s in elf.iter_sections() if s["sh_flags"] & 2}
+            for elf in (a, b)
+        ]
+        require(
+            sections[0].keys() == sections[1].keys(), "Different allocated sections"
+        )
         for name, first in sections[0].items():
             second = sections[1][name]
             for field in ("sh_type", "sh_flags", "sh_addr", "sh_size", "sh_addralign"):
@@ -33,7 +43,9 @@ def compare(left, right, version):
             require(data[0] == data[1], f"Different contents in {name}")
             print(f"Identical: {name}")
     print("Image SHA-256:", *(report["sha256"] for report in reports))
-    print("Firmware matches apart from allowed build metadata; this is not a hardware test.")
+    print(
+        "Firmware matches apart from allowed build metadata; this is not a hardware test."
+    )
 
 
 if __name__ == "__main__":

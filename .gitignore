@@ -1,4 +1,7 @@
 build/
+/result
+/result-*
+/nix/__pycache__/
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/settings.json
