@@ -488,6 +488,14 @@ esp_err_t network_wifi_set_sta_mode() {
         err = esp_wifi_start();
         if (err != ESP_OK) {
             ESP_LOGE(TAG, "Error starting wifi: %s", esp_err_to_name(err));
+        } else {
+            // Station-only boots skip the power-save setting in AP configuration.
+            err = esp_wifi_set_ps(DEFAULT_STA_POWER_SAVE);
+            if (err != ESP_OK) {
+                ESP_LOGE(TAG, "Error setting wifi power save: %s", esp_err_to_name(err));
+            } else {
+                ESP_LOGI(TAG, "Wifi power save mode: %d", DEFAULT_STA_POWER_SAVE);
+            }
         }
     }
     return err;

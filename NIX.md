@@ -25,6 +25,20 @@ Changing gitlinks requires updating the corresponding submodule pins in
 to another upstream version; ESP-IDF stores at most 31 characters. Nix's fixed
 `SOURCE_DATE_EPOCH` makes build timestamps independent of wall-clock time.
 
+# Wi-Fi playback experiment
+
+The `wifi-playback-stability` branch reports `I2S-4MFlash.16.1737.wifi2`.
+It keeps the Wi-Fi modem awake (`WIFI_PS_NONE`), trading increased power
+consumption for lower packet-delivery latency. The policy is applied on station
+startup as well as AP setup; normal station boots do not run AP configuration. The web UI scans only when the
+Scan button is clicked and its HTML is packaged once, avoiding duplicate
+initialization and polling. The rebuilt UI passed an isolated browser test:
+no scan during page load and exactly one scan per button click.
+
+These changes do not establish that AirPlay stuttering is fixed. Test sustained
+playback on the device. Keep `-s -disable` in its startup command if LMS is unused;
+OTA preserves that setting rather than overwriting it.
+
 # Spotify credentials
 
 This upstream version requires a Spotify application client ID and secret for

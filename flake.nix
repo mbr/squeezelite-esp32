@@ -146,7 +146,7 @@
       tools = [ toolchain pythonEnv cmake pkgs.ninja pkgs.git pkgs.protobuf pkgs.pkg-config ];
       firmware = pkgs.stdenvNoCC.mkDerivation {
         pname = "squeezeampagain-firmware";
-        version = "1737";
+        version = "1737-wifi2";
         src = lib.cleanSourceWith {
           src = self;
           filter = path: type:
@@ -163,7 +163,7 @@
         IDF_PATH = idf;
         IDF_CCACHE_ENABLE = "0";
         IDF_COMPONENT_MANAGER = "0";
-        PROJECT_VER = "I2S-4MFlash.16.1737.nix";
+        PROJECT_VER = "I2S-4MFlash.16.1737.wifi2";
         dontUseCmakeConfigure = true;
         dontUseNinjaBuild = true;
         dontUseNinjaInstall = true;

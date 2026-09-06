@@ -228,12 +228,12 @@ bool network_is_interface_connected(esp_netif_t * interface);
  */
 #define DEFAULT_STA_ONLY 					1
 
-/** @brief Defines if wifi power save shall be enabled.
+/** @brief Keep the Wi-Fi modem awake to avoid sleep-induced streaming latency.
  *  Value: WIFI_PS_NONE for full power (wifi modem always on)
- *  Value: WIFI_PS_MODEM for power save (wifi modem sleep periodically)
+ *  Value: WIFI_PS_MIN_MODEM for power save (wifi modem sleeps periodically)
  *  Note: Power save is only effective when in STA only mode
  */
-#define DEFAULT_STA_POWER_SAVE 				WIFI_PS_MIN_MODEM
+#define DEFAULT_STA_POWER_SAVE 				WIFI_PS_NONE
 
 
 void network_reboot_ota(char * url);
