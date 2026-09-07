@@ -1,5 +1,9 @@
 # Native firmware build
 
+`squeezeampagain` contains the selected upstream release plus Alex's board
+patches. `squeezeampagain-mbr` builds on it with our build tooling and firmware
+changes. Historical checkpoints are preserved as annotated `archive/*` tags.
+
 Run `nix build` on `x86_64-linux`. The OTA application is
 `result/squeezelite.bin`; `result/manifest.json` records its identity and digest.
 The build never contacts or flashes a device. Run `./check.sh` for checks and
@@ -27,7 +31,7 @@ to another upstream version; ESP-IDF stores at most 31 characters. Nix's fixed
 
 # Wi-Fi playback experiment
 
-The `wifi-playback-stability` branch reports `I2S-4MFlash.16.1737.wifi2`.
+The `squeezeampagain-mbr` branch reports `I2S-4MFlash.16.1737.wifi2`.
 It keeps the Wi-Fi modem awake (`WIFI_PS_NONE`), trading increased power
 consumption for lower packet-delivery latency. The policy is applied on station
 startup as well as AP setup; normal station boots do not run AP configuration. The web UI scans only when the
@@ -93,7 +97,7 @@ Audio and long-term reliability were not tested.
 
 The validated native `1737` image is 2,652,880 bytes, with SHA-256
 `177d76c8f66d0092167f56b04bf81b228b558f12fefa862cd9c21d4655578851`.
-The native baseline is preserved on `baseline-nix-validated`.
+The native baseline is preserved at the `archive/baseline-nix-validated` tag.
 
 # OTA and recovery
 
