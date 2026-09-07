@@ -4,19 +4,27 @@
 patches. `squeezeampagain-mbr` builds on it with our build tooling and firmware
 changes. Historical checkpoints are preserved as annotated `archive/*` tags.
 
-Run `nix build` on `x86_64-linux`. The OTA application is
-`result/squeezelite.bin`; `result/manifest.json` records its identity and digest.
-The build never contacts or flashes a device. Run `./check.sh` for checks and
-`./format.sh` for formatting. `nix develop` provides the build tools.
+Run `nix build` on Linux (`x86_64-linux`) or macOS (`x86_64-darwin` and
+`aarch64-darwin`). Apple Silicon requires Rosetta 2: the pinned ESP32 compiler
+and CMake releases contain Intel executables. If needed, install it with
+`softwareupdate --install-rosetta` before building. No Linux VM or container is
+needed.
+
+The OTA application is `result/squeezelite.bin`; `result/manifest.json` records
+its identity and digest. The build never contacts or flashes a device. Run
+`./check.sh` for checks and `./format.sh` for formatting. `nix develop` provides
+the build tools.
 
 The flake builds the checked-out firmware source with the `I2S-4MFlash`,
 16-bit configuration, selecting Alex's `SQUEEZEAMPAGAIN` profile and GPIO `36`
 for speaker fault detection. The generic preset otherwise overrides that pin
 with `-1`. This is not the upstream `SqueezeAmp` hardware profile.
 
-`flake.lock` pins Nixpkgs. ESP-IDF, submodules, the Espressif GCC distribution,
-and CMake are independently hash-pinned. The native compiler executables are
-relocated for Nix; no container or FHS environment is used. GDB is omitted to
+`flake.lock` pins Nixpkgs, with a separate Darwin channel pin for cached macOS
+host dependencies without changing the validated Linux build. ESP-IDF,
+submodules, the Espressif GCC distribution, and CMake are independently
+hash-pinned. Linux executables are relocated for Nix; macOS uses the matching
+Darwin distributions. No container or FHS environment is used. GDB is omitted to
 avoid its obsolete Python dependency. CMake is pinned because newer releases
 change the ordering of ESP-IDF's C++ standard flags. The existing linker-generator
 patch from `docker/patches` is applied to ESP-IDF, matching the reference
@@ -86,6 +94,17 @@ settings. `--rebuild` independently rebuilds the Nix derivation and checks its
 outputs against the previous realization.
 
 # Validation record
+
+The `wifi2` firmware builds on an Apple Silicon Mac running macOS 15.5 with
+Rosetta 2. Both Darwin outputs passed image validation and corruption tests and
+produced byte-identical OTA applications. The `aarch64-darwin` output also passed
+`nix build --rebuild`, `./check.sh`, and `./format.sh`. The Intel output was built
+under Rosetta, not on a physical Intel Mac. The Linux firmware derivation is
+unchanged by the macOS build support; Linux was not rebuilt for this change.
+No device was flashed or tested with the Mac-built image.
+
+The Mac-built `wifi2` application is 2,648,080 bytes, with SHA-256
+`17caff93b5d538a307762cdf439dfde07cf2a7b4fc9b2831a88c60c99d075df9`.
 
 Validated on Linux with Alex's `4eed7acd` baseline and upstream release
 `I2S-4MFlash.16.1737.master-v4.3` (`f8a2904b`) plus his board patch.
